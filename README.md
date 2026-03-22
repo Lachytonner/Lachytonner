@@ -1,16 +1,19 @@
-## Hi there 👋
+# Hey, I'm Lachy 👋
 
-<!--
-**Lachytonner/Lachytonner** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+Auckland-based developer and entrepreneur. I build websites and SaaS products, tinker with local AI inference, and find ways to automate things that shouldn't still be manual.
 
-Here are some ideas to get you started:
+When I'm not coding I'm on a BMX, surfing the west coast, or kayaking somewhere.
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+## 🛠 Stack
+![Next.js](https://img.shields.io/badge/Next.js-000?logo=nextdotjs&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?logo=supabase&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind-06B6D4?logo=tailwindcss&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)
+
+## 🤖 Into
+- Local LLM inference & agentic AI setups
+- SaaS for industries that haven't caught up yet
+- Automating cold outreach and client pipelines
+
+## 📍 Auckland, NZ
