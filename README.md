@@ -1,19 +1,31 @@
-# Hey, I'm Lachy 👋
+<div align="center">
+  <h1>👋 I'm Lachy</h1>
+  <p>Founder of <b>Flowdesk Systems</b> | Building AI Automation & NZ Trade ERPs</p>
 
-Auckland-based developer and entrepreneur. I build websites and SaaS products, tinker with local AI inference, and find ways to automate things that shouldn't still be manual.
+  <p>
+    <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" />
+    <img src="https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" />
+    <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" />
+    <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" />
+  </p>
+</div>
 
-When I'm not coding I'm on a BMX, surfing, or body boarding.
+---
 
-## 🛠 Stack
-![Next.js](https://img.shields.io/badge/Next.js-000?logo=nextdotjs&logoColor=white)
-![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?logo=supabase&logoColor=white)
-![Tailwind](https://img.shields.io/badge/Tailwind-06B6D4?logo=tailwindcss&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
-![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)
+### 🚀 Currently Building
+* **Flowdesk Systems:** Architecting agentic workflows and AI-driven business automation.
+* **Trade Management SaaS:** A localized ERP built for NZ plumbers and electricians.
+* **MCP Ecosystem:** Developing open-source Model Context Protocol servers.
 
-## 🤖 Into
-- Local LLM inference & agentic AI setups
-- SaaS for industries that haven't caught up yet
-- Automating cold outreach and client pipelines
+### 🛠️ Environment & Tools
+* **OS:** Windows / WSL (Ubuntu)
+* **AI Frameworks:** Agentic systems, local LLM inference, and custom Claude integrations.
+* **Trading:** Algorithmic USOIL & Crypto bots using CCXT and NinjaTrader 8.
 
-## 📍 Auckland, NZ
+### 🌊 Outside of Dev
+* Trading futures via Apex Trader Funding.
+* Surfing the Auckland East Coast or riding my BMX.
+
+<div align="center">
+  <img src="https://github-readme-stats.vercel.app/api?username=lachytonner&show_icons=true&theme=transparent&hide_border=true" alt="Lachy's GitHub Stats" />
+</div>
