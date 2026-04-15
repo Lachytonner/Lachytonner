@@ -1,19 +1,76 @@
-# Hey, I'm Lachy 👋
+# claude-cost-tracker
 
-Auckland-based developer and entrepreneur. I build websites and SaaS products, tinker with local AI inference, and find ways to automate things that shouldn't still be manual.
+PTY wrapper for Claude Code that transparently proxies the TUI and displays a session cost summary on exit.
 
-When I'm not coding I'm on a BMX, surfing, or body boarding.
+## Install
 
-## 🛠 Stack
-![Next.js](https://img.shields.io/badge/Next.js-000?logo=nextdotjs&logoColor=white)
-![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?logo=supabase&logoColor=white)
-![Tailwind](https://img.shields.io/badge/Tailwind-06B6D4?logo=tailwindcss&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
-![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)
+```sh
+npm install -g claude-cost-tracker
+```
 
-## 🤖 Into
-- Local LLM inference & agentic AI setups
-- SaaS for industries that haven't caught up yet
-- Automating cold outreach and client pipelines
+## Usage
 
-## 📍 Auckland, NZ
+Use `claude-cost` anywhere you'd normally use `claude`. All arguments are forwarded:
+
+```sh
+claude-cost
+claude-cost -p "explain this repo"
+claude-cost --model claude-3-7-sonnet-20250219
+
+# Or just view the last session's cost:
+claude-cost show
+claude-cost --cost
+claude-cost -c
+```
+
+When the session ends, a cost summary is printed automatically:
+
+```
+╔═══════════════════════════════════════════════════════════╗
+║  Claude Session Cost Summary                              ║
+╟───────────────────────────────────────────────────────────╢
+║  Session Cost:    $0.1234                                 ║
+║  Model:           claude-sonnet-4-6                       ║
+║  Messages:        12                                      ║
+║                                                           ║
+║  Input tokens:    5,000   ($0.0150)                       ║
+║  Output tokens:   2,000   ($0.0300)                       ║
+║  Cache read:      10,000   ($0.0030)                      ║
+║  Cache write:     3,000   ($0.0113)                       ║
+║  Total tokens:    20,000                                  ║
+╚═══════════════════════════════════════════════════════════╝
+```
+
+## How It Works
+
+1. Spawns the real `claude` binary via node-pty, forwarding all args, terminal dimensions, and resize events
+2. All stdin/stdout pass through unchanged — Claude Code's TUI works identically
+3. On exit, finds the most recently modified `.jsonl` in `~/.claude/projects/`
+4. Parses all assistant message usage objects and calculates cost
+5. Prints a formatted cost summary box
+
+## Supported Models & Pricing
+
+| Model | Input | Output | Cache Write | Cache Read |
+|-------|-------|--------|-------------|------------|
+| Claude 3.7 Sonnet | $3/M | $15/M | $3.75/M | $0.30/M |
+| Claude 3.5 Sonnet | $3/M | $15/M | $3.75/M | $0.30/M |
+| Claude Opus 4.6 / 4.5 | $5/M | $25/M | $1.25/M | $0.50/M |
+| Claude Sonnet 4.6 / 4.5 | $3/M | $15/M | $3.75/M | $0.30/M |
+| Claude Haiku 4.5 | $0.80/M | $4/M | $1/M | $0.08/M |
+
+Unknown models fall back to Sonnet-tier pricing.
+
+## Platform Support
+
+- **Windows**: Detects `claude.cmd` / `claude.exe`, uses ConPTY
+- **macOS / Linux**: Standard PTY
+
+## Requirements
+
+- Node.js 16+
+- Claude Code installed and on PATH
+
+## License
+
+MIT

@@ -1,0 +1,115 @@
+From 0a468d44482de0e1735e6383777d9a297b366d41 Mon Sep 17 00:00:00 2001
+From: "google-labs-jules[bot]"
+ <161369871+google-labs-jules[bot]@users.noreply.github.com>
+Date: Wed, 15 Apr 2026 03:56:13 +0000
+Subject: [PATCH 1/2] feat: Add Claude 3.7 & 3.5 pricing and 'show' command
+
+- Added official pricing for Claude 3.7 Sonnet, 3.5 Sonnet, 3.5 Haiku, 3 Opus, 3 Sonnet, and 3 Haiku.
+- Fixed 'findMostRecentJsonl' to strictly match 'messages.jsonl' to avoid parsing non-message JSONLs.
+- Added '-c', '--cost', and 'show' arguments to view the cost of the last session without launching Claude Code.
+- Updated README with the new models and instructions.
+---
+ README.md    |  9 ++++++++-
+ src/index.js | 44 ++++++++++++++++++++++++++++++++++++++++++--
+ 2 files changed, 50 insertions(+), 3 deletions(-)
+
+diff --git a/README.md b/README.md
+index 1693543..0dfaf43 100644
+--- a/README.md
++++ b/README.md
+@@ -15,7 +15,12 @@ Use `claude-cost` anywhere you'd normally use `claude`. All arguments are forwar
+ ```sh
+ claude-cost
+ claude-cost -p "explain this repo"
+-claude-cost --model claude-opus-4-6
++claude-cost --model claude-3-7-sonnet-20250219
++
++# Or just view the last session's cost:
++claude-cost show
++claude-cost --cost
++claude-cost -c
+ ```
+
+ When the session ends, a cost summary is printed automatically:
+@@ -48,6 +53,8 @@ When the session ends, a cost summary is printed automatically:
+
+ | Model | Input | Output | Cache Write | Cache Read |
+ |-------|-------|--------|-------------|------------|
++| Claude 3.7 Sonnet | $3/M | $15/M | $3.75/M | $0.30/M |
++| Claude 3.5 Sonnet | $3/M | $15/M | $3.75/M | $0.30/M |
+ | Claude Opus 4.6 / 4.5 | $5/M | $25/M | $1.25/M | $0.50/M |
+ | Claude Sonnet 4.6 / 4.5 | $3/M | $15/M | $3.75/M | $0.30/M |
+ | Claude Haiku 4.5 | $0.80/M | $4/M | $1/M | $0.08/M |
+diff --git a/src/index.js b/src/index.js
+index bdab7ba..1450cf8 100644
+--- a/src/index.js
++++ b/src/index.js
+@@ -10,6 +10,16 @@ const pty = require('node-pty');
+ // Pricing per 1M tokens (current Anthropic pricing)
+ // ---------------------------------------------------------------------------
+ const PRICING = {
++  // Official Claude 3.7 & 3.5 Models
++  'claude-3-7-sonnet-20250219':   { input: 3,    output: 15, cacheRead: 0.30, cacheWrite: 3.75 },
++  'claude-3-5-sonnet-20241022':   { input: 3,    output: 15, cacheRead: 0.30, cacheWrite: 3.75 },
++  'claude-3-5-sonnet-20240620':   { input: 3,    output: 15, cacheRead: 0.30, cacheWrite: 3.75 },
++  'claude-3-5-haiku-20241022':    { input: 0.80, output: 4,  cacheRead: 0.08, cacheWrite: 1    },
++  'claude-3-opus-20240229':       { input: 15,   output: 75, cacheRead: 1.50, cacheWrite: 3.75 },
++  'claude-3-sonnet-20240229':     { input: 3,    output: 15, cacheRead: 0.30, cacheWrite: 3.75 },
++  'claude-3-haiku-20240307':      { input: 0.25, output: 1.25, cacheRead: 0.025, cacheWrite: 0.30 },
++
++  // Future/Internal placeholders from original repo
+   'claude-opus-4-6':              { input: 5,    output: 25, cacheRead: 0.50, cacheWrite: 1.25 },
+   'claude-opus-4-5-20250620':     { input: 5,    output: 25, cacheRead: 0.50, cacheWrite: 1.25 },
+   'claude-sonnet-4-6':            { input: 3,    output: 15, cacheRead: 0.30, cacheWrite: 3.75 },
+@@ -59,7 +69,7 @@ function findMostRecentJsonl(dir) {
+       const full = path.join(d, entry.name);
+       if (entry.isDirectory()) {
+         walk(full);
+-      } else if (entry.name.endsWith('.jsonl')) {
++      } else if (entry.name === 'messages.jsonl') {
+         try {
+           const stat = fs.statSync(full);
+           if (stat.mtimeMs > newestMtime) {
+@@ -169,9 +179,39 @@ function printSummary(session) {
+ // ---------------------------------------------------------------------------
+ // PTY wrapper – spawn claude, relay I/O, print cost on exit
+ // ---------------------------------------------------------------------------
++function showLastCost() {
++  try {
++    const projectsDir = getProjectsDir();
++    if (fs.existsSync(projectsDir)) {
++      const filePath = findMostRecentJsonl(projectsDir);
++      if (filePath) {
++        const session = parseSession(filePath);
++        if (session.messageCount > 0) {
++          printSummary(session);
++        } else {
++          console.log('No recent Claude session data found.');
++        }
++      } else {
++        console.log('No recent Claude session data found.');
++      }
++    } else {
++      console.log('Claude projects directory not found.');
++    }
++  } catch (e) {
++    console.error('Error parsing cost:', e.message);
++  }
++}
++
+ function main() {
+-  const claudeBin = findClaude();
+   const args = process.argv.slice(2);
++
++  // Check for the show/cost flag
++  if (args.length === 1 && (args[0] === 'show' || args[0] === '--cost' || args[0] === '-c')) {
++    showLastCost();
++    process.exit(0);
++  }
++
++  const claudeBin = findClaude();
+   const isWin = process.platform === 'win32';
+
+   // Use shell on Windows for .cmd files, direct exec otherwise
+--
+2.53.0
